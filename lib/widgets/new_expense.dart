@@ -1,8 +1,13 @@
+//import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
+//    import 'package:expense_tracker/widgets/expenses_list/expense_item.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+  final void Function(Expense expense) onAddExpense;
+  //final void Function(String, double, DateTime, Category) expenseSaver;
+
   @override
   State<NewExpense> createState() {
     return _NewExpenseState();
@@ -21,7 +26,7 @@ class _NewExpenseState extends State<NewExpense> {
   DateTime? _selectedDate;
   Category _selectedCategory = Category.leisure;
 
-  void _submitEspenseData() {
+  void _submitExpenseData() {
     final enteredAmount =
         double.tryParse(_numberController.text); // tryParse('hello') => null
     final amountIsInvalid = (enteredAmount == null || enteredAmount <= 0);
@@ -29,8 +34,43 @@ class _NewExpenseState extends State<NewExpense> {
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
         _selectedDate == null) {
-      // show error message
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Invalid input"),
+          content: const Text(
+            "Please make sure a valid title, amount, date and category was entered",
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('ok'))
+          ],
+        ),
+      );
+      return;
     }
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
+    );
+    Navigator.pop(context);
+    //widget.expenseSaver(_titleController.text,
+    //    double.parse(_numberController.text), _selectedDate, _selectedCategory);
+    // List<Expense> newExpense = [
+    //   Expense(
+    //     title: _titleController.text,
+    //     amount: double.parse(_numberController.text),
+    //     date: (_selectedDate!),
+    //     category: _selectedCategory,
+    //   ),
+    // ];
   }
 
   void _presentDatePicker() async {
@@ -60,8 +100,9 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(children: [
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+      child: Column(
+        children: [
           TextField(
             // onChanged: _saveTitleInput,
             controller: _titleController,
@@ -77,7 +118,7 @@ class _NewExpenseState extends State<NewExpense> {
                   keyboardType: TextInputType.number,
                   //maxLength: 50,
                   decoration: const InputDecoration(
-                    prefixText: 'KRW ',
+                    prefixText: '\$ ',
                     label: Text("Amount"),
                   ),
                 ),
@@ -134,11 +175,13 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
-                onPressed: _submitEspenseData,
+                onPressed: _submitExpenseData,
                 child: const Text("Save expense"),
               )
             ],
           )
-        ]));
+        ],
+      ),
+    );
   }
 }
