@@ -61,16 +61,6 @@ class _NewExpenseState extends State<NewExpense> {
       ),
     );
     Navigator.pop(context);
-    //widget.expenseSaver(_titleController.text,
-    //    double.parse(_numberController.text), _selectedDate, _selectedCategory);
-    // List<Expense> newExpense = [
-    //   Expense(
-    //     title: _titleController.text,
-    //     amount: double.parse(_numberController.text),
-    //     date: (_selectedDate!),
-    //     category: _selectedCategory,
-    //   ),
-    // ];
   }
 
   void _presentDatePicker() async {
@@ -104,7 +94,6 @@ class _NewExpenseState extends State<NewExpense> {
       child: Column(
         children: [
           TextField(
-            // onChanged: _saveTitleInput,
             controller: _titleController,
             maxLength: 50,
             decoration: const InputDecoration(label: Text("Title")),
@@ -113,10 +102,8 @@ class _NewExpenseState extends State<NewExpense> {
             children: [
               Expanded(
                 child: TextField(
-                  // onChanged: _saveTitleInput,
                   controller: _numberController,
                   keyboardType: TextInputType.number,
-                  //maxLength: 50,
                   decoration: const InputDecoration(
                     prefixText: '\$ ',
                     label: Text("Amount"),
@@ -127,7 +114,6 @@ class _NewExpenseState extends State<NewExpense> {
               Expanded(
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     _selectedDate == null

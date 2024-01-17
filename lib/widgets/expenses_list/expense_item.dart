@@ -13,9 +13,13 @@ class ExpenseItem extends StatelessWidget {
           vertical: 16,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               expense.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge, //* using Theme.of(context) flutter connects this widget to the Theme above
             ),
             const SizedBox(height: 4),
             Row(
